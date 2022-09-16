@@ -207,6 +207,8 @@ def train(CONFIG_PATH, CONFIG, train_loader_adversarial_, val_loader_adversarial
                 
             data = train_loader_adversarial_.__getitem__(batch_id)
 
+            
+        train_loader_adversarial_.__addToEpoch__()
         loss_train_epoch = loss_train_epoch / batch_id
         iou_train_epoch = iou_train_epoch / batch_id
         acc_train_epoch = acc_train_epoch / batch_id
