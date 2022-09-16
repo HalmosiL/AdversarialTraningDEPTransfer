@@ -15,6 +15,9 @@ class DatasetAdversarial:
         
     def __len__(self):
         return sys.maxsize
+    
+    def __addToEpoch__(self):
+        self.epoch += 1
 
     def __getitem__(self, idx):        
         path_a = int(idx / self.slice_)
