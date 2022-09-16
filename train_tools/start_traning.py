@@ -31,6 +31,20 @@ if __name__ == '__main__':
     
     Comunication.tcp_socket = socket.create_connection((CONFIG["CONFMANAGER_HOST"], CONFIG["CONFMANAGER_PORT"]))
     
+    if(os.path.exists("../backupQueue1")):
+        models_in_cache = glob.glob("../backupQueue1/" + "*.pt")
+        for m in models_in_cache:
+            os.remove(m)
+    else:
+        os.mkdir("../backupQueue1")
+        
+    if(os.path.exists("../backupQueue2")):
+        models_in_cache = glob.glob("../backupQueue2/" + "*.pt")
+        for m in models_in_cache:
+            os.remove(m)
+    else:
+        os.mkdir("../backupQueue2")
+    
     print("Clear model cache...")
     models_in_cache = glob.glob(CONFIG["MODEL_CACHE"] + "*.pt")
     for m in models_in_cache:
