@@ -36,8 +36,10 @@ def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, s
                 print("save:", data_queue + 'label_' + str(id_) + '_' + str(i) + '_.pt')
                 torch.save(torch.cat(((image_normal[i].cpu().detach(), image_adversarial[i].cpu().detach()))), data_queue + 'image_' + str(id_) + '_' + str(i) + '_.pt')
                 torch.save(torch.cat(((label_normal[i].cpu().detach(), label_adversarial[i].cpu().detach()))), data_queue + 'label_' + str(id_) + '_' + str(i) + '_.pt')
-                torch.save(image_adversarial[i].cpu().detach().clone(), save_path + 'image_' + str(id_) + '_' + str(i) + '_.pt')
-                torch.save(label_adversarial[i].cpu().detach().clone(), save_path + 'label_' + str(id_) + '_' + str(i) + '_.pt')
+                
+                if(save_path is not None):
+                    torch.save(image_adversarial[i].cpu().detach().clone(), save_path + 'image_' + str(id_) + '_' + str(i) + '_.pt')
+                    torch.save(label_adversarial[i].cpu().detach().clone(), save_path + 'label_' + str(id_) + '_' + str(i) + '_.pt')
     else:
         image = batch[0].to(device)
 
@@ -64,5 +66,6 @@ def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, s
                 torch.save(image[i].cpu().detach().clone(), data_queue + 'image_' + str(id_) + '_' + str(i) + '_.pt')
                 torch.save(label[i].cpu().detach().clone(), data_queue + 'label_' + str(id_) + '_' + str(i) + '_.pt')
                 
-                torch.save(image[i].cpu().detach().clone(), save_path + 'image_' + str(id_) + '_' + str(i) + '_.pt')
-                torch.save(label[i].cpu().detach().clone(), save_path + 'label_' + str(id_) + '_' + str(i) + '_.pt')
+                if(save_path is not None):
+                    torch.save(image[i].cpu().detach().clone(), save_path + 'image_' + str(id_) + '_' + str(i) + '_.pt')
+                    torch.save(label[i].cpu().detach().clone(), save_path + 'label_' + str(id_) + '_' + str(i) + '_.pt')
