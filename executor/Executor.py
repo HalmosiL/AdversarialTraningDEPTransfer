@@ -109,7 +109,7 @@ class Executor:
             transform=val_transform
         )
 
-        self.train_data_set_loader = torch.utils.data.DataLoader(
+        self.train_data_set_loader_start = torch.utils.data.DataLoader(
             train_data,
             batch_size=self.batch_size,
             shuffle=True,
@@ -118,6 +118,16 @@ class Executor:
             drop_last=True
         )
 
+        
+        self.train_data_set_loader = torch.utils.data.DataLoader(
+            train_data,
+            batch_size=self.batch_size/2,
+            shuffle=True,
+            num_workers=self.num_workers,
+            pin_memory=False,
+            drop_last=True
+        )
+        
         self.val_data_set_loader = torch.utils.data.DataLoader(
             val_data,
             batch_size=18,
@@ -156,16 +166,16 @@ class Executor:
         elif(com_conf_mode == "val"):
             return (len(glob.glob(self.data_queue[:-1] + "_val/*.pt")) / 2) < self.queue_size_val
             
-    def generateTrainData(self, mode, number_of_steps=None):
+    def generateTrainData(self, mode, dataloader, save_path=None, number_of_steps=None, gen=False):
         if(number_of_steps is None):
             number_of_steps = self.number_of_steps
         
         if(mode == "train"):
             print("Executor start train....")
-            iter_ = iter(self.train_data_set_loader)
         elif(mode == "val"):
             print("Executor start val....")
-            iter_ = iter(self.val_data_set_loader)
+        
+        iter_ = iter(dataloader)
 
         element_id = 0
         model = None
@@ -197,7 +207,8 @@ class Executor:
                             data_queue=self.data_queue if data['MODE'] == "train" else self.data_queue[:-1] + "_val/",
                             split=self.split,
                             split_size=self.split_size,
-                            gen=False
+                            save_path=save_path,
+                            gen=gen
                         )                               
 
                         element_id += 1
@@ -215,6 +226,8 @@ class Executor:
                     print("Data queue is full....")
                     time.sleep(2)
     def start(self):
+        epoch = 0
+        
         while(True):
                 print("GET MAIN CONF....")
                 data = self.comunication.readConf()
@@ -224,14 +237,29 @@ class Executor:
                 
                 if(not data['Executor_Finished_Train'] == "True" and data['MODE'] == "train"):
                     print("START TRAIN GEN...")
-                    self.generateTrainData("train")
+  
+                    self.generateTrainData(
+                        mode="train",
+                        dataloader=self.train_data_set_loader_start if epoch == 0 else self.train_data_set_loader,
+                        save_path="../backupQueue1" if epoch % 2 == 0 else "../backupQueue2",
+                        number_of_steps=self.number_of_steps,
+                        gen=(epoch==0)
+                    )
 
                 self.model_name = None 
                     
                 if(not data['Executor_Finished_Val'] == "True" and data['MODE'] == "val"):
                     print("START VAL GEN...")
-                    self.generateTrainData("val")
+                    self.generateTrainData(
+                        mode="val",
+                        dataloader=self.val_data_set_loader,
+                        save_path=None,
+                        number_of_steps=3,
+                        gen=False
+                    )
                 
                 if(data['MODE'] == "off"):
                     print("Stop Executor...")
                     break
+                    
+                epoch += 1
