@@ -1,7 +1,7 @@
 from executor.Adversarial import model_immer_attack_auto_loss
 from torchvision import transforms
 import torch
-def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, split_size, gen=True):
+def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, split_size, save_path, gen=True):
     print("Gen_", id_, " started..")
     if(gen):
         image = batch[0].to(device)
@@ -36,6 +36,8 @@ def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, s
                 print("save:", data_queue + 'label_' + str(id_) + '_' + str(i) + '_.pt')
                 torch.save(torch.cat(((image_normal[i].cpu().detach(), image_adversarial[i].cpu().detach()))), data_queue + 'image_' + str(id_) + '_' + str(i) + '_.pt')
                 torch.save(torch.cat(((label_normal[i].cpu().detach(), label_adversarial[i].cpu().detach()))), data_queue + 'label_' + str(id_) + '_' + str(i) + '_.pt')
+                torch.save(image_adversarial[i].cpu().detach().clone(), save_path + 'image_' + str(id_) + '_' + str(i) + '_.pt')
+                torch.save(label_adversarial[i].cpu().detach().clone(), save_path + 'label_' + str(id_) + '_' + str(i) + '_.pt')
     else:
         image = batch[0].to(device)
 
@@ -61,3 +63,6 @@ def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, s
                 print("save:", data_queue + 'label_' + str(id_) + '_' + str(i) + '_.pt')
                 torch.save(image[i].cpu().detach().clone(), data_queue + 'image_' + str(id_) + '_' + str(i) + '_.pt')
                 torch.save(label[i].cpu().detach().clone(), data_queue + 'label_' + str(id_) + '_' + str(i) + '_.pt')
+                
+                torch.save(image[i].cpu().detach().clone(), save_path + 'image_' + str(id_) + '_' + str(i) + '_.pt')
+                torch.save(label[i].cpu().detach().clone(), save_path + 'label_' + str(id_) + '_' + str(i) + '_.pt')
