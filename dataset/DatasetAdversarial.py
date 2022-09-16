@@ -2,6 +2,7 @@ import os
 import torch
 import time
 import sys
+import glob
 
 class DatasetAdversarial:    
     def __init__(self, con_conf_path, data_queue_path, slice_, mode_):
@@ -9,6 +10,8 @@ class DatasetAdversarial:
         self.data_queue_path = data_queue_path
         self.slice_ = slice_
         self.mode_ = mode_
+        self.bact_T_Queue = None
+        self.epoch=0
         
     def __len__(self):
         return sys.maxsize
@@ -46,7 +49,13 @@ class DatasetAdversarial:
                     return [[image_normal_path, label_normal_path, image_adversarial_path, label_adversarial_path]]
 
             return []
-        elif(self.mode_ == "val" or self.mode_ == "off"):
+        elif(self.mode_ == "val" or self.mode_ == "off" or self.epoch>0):
+            if(idx == 0):
+                if(self.epoch % 2 == 0):
+                    self.bact_T_Queue = glob.glob("../backupQueue2/image_*.pt")
+                else:
+                    self.bact_T_Queue = glob.glob("../backupQueue1/image_*.pt")
+            
             image_path = self.data_queue_path + "image_" + str(path_a) + "_" + str(path_b) + "_.pt"
             label_path = self.data_queue_path + "label_" + str(path_a) + "_" + str(path_b) + "_.pt"
 
@@ -57,6 +66,23 @@ class DatasetAdversarial:
                 try:
                     image_ = torch.load(image_path).clone()
                     label_ = torch.load(label_path).clone()
+                    
+                    image_path_2 = self.bact_T_Queue[0]
+                    label_path_2 = self.bact_T_Queue[0].replace("image", "label")
+                    
+                    if(len(self.bact_T_Queue) != 0):
+                        image_2 = torch.load(image_path_2).clone()
+                        label_2 = torch.load(label_path_2).clone()
+                    
+                        image_ = torch.cat((image_, image_2), dim=0)
+                        label_ = torch.cat((label_, label_2), dim=0)
+                    
+                        return [
+                            image_.reshape(1, *image_.shape),
+                            label_.reshape(1, *label_.shape),
+                            [image_path, image_path_2, label_path, label_path_2]
+                        ]
+                    
                     return [
                         image_.reshape(1, *image_.shape),
                         label_.reshape(1, *label_.shape),
