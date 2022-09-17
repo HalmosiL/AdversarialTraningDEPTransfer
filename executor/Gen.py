@@ -24,8 +24,10 @@ def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, s
         label_adversarial = label[1]
 
         if(split == -1 or split == 1):
-            torch.save(torch.cat(image_normal.cpu().detach(), image_adversarial.cpu().detach()), data_queue + 'image_' + str(id_) + '_0_.pt')
-            torch.save(torch.cat(label_normal.cpu().detach(), label_adversarial.cpu().detach()), data_queue + 'label_' + str(id_) + '_0_.pt')
+            torch.save(torch.cat(image_normal.cpu().detach(), image_adversarial.cpu().detach()), data_queue + 'image_normal' + str(id_) + '_0_.pt')
+            torch.save(torch.cat(label_normal.cpu().detach(), label_adversarial.cpu().detach()), data_queue + 'label_normal' + str(id_) + '_0_.pt')
+            torch.save(torch.cat(image_normal.cpu().detach(), image_adversarial.cpu().detach()), data_queue + 'image_adversarial' + str(id_) + '_0_.pt')
+            torch.save(torch.cat(label_normal.cpu().detach(), label_adversarial.cpu().detach()), data_queue + 'label_adversarial' + str(id_) + '_0_.pt')
         else:
             image_normal = torch.split(image_normal, int(split_size / 2))
             image_adversarial = torch.split(image_adversarial, int(split_size / 2))
@@ -33,13 +35,14 @@ def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, s
             label_adversarial = torch.split(label_adversarial, int(split_size / 2))
 
             for i in range(len(image_normal)):
-                print("save:", data_queue + 'image_' + str(id_) + '_' + str(i) + '_.pt')
-                print("save:", data_queue + 'label_' + str(id_) + '_' + str(i) + '_.pt')
-                print(len(image_normal))
-                torch.save(torch.cat((image_normal[i].cpu().detach(), image_adversarial[i].cpu().detach())), data_queue + 'image_' + str(id_) + '_' + str(i) + '_.pt')
-                torch.save(torch.cat((label_normal[i].cpu().detach(), label_adversarial[i].cpu().detach())), data_queue + 'label_' + str(id_) + '_' + str(i) + '_.pt')
-                
-                print("ok")
+                print("save:", data_queue + 'image_normal' + str(id_) + '_' + str(i) + '_.pt')
+                print("save:", data_queue + 'label_normal' + str(id_) + '_' + str(i) + '_.pt')
+                print("save:", data_queue + 'image_adversarial' + str(id_) + '_' + str(i) + '_.pt')
+                print("save:", data_queue + 'label_adversarial' + str(id_) + '_' + str(i) + '_.pt')
+                torch.save(image_normal[i].cpu().detach(), data_queue + 'image_normal' + str(id_) + '_' + str(i) + '_.pt')
+                torch.save(label_normal[i].cpu().detach(), data_queue + 'label_normal' + str(id_) + '_' + str(i) + '_.pt')
+                torch.save(image_adversarial[i].cpu().detach(), data_queue + 'image_adversarial' + str(id_) + '_' + str(i) + '_.pt')
+                torch.save(label_adversarial[i].cpu().detach(), data_queue + 'label_adversarial' + str(id_) + '_' + str(i) + '_.pt')
                 
                 if(save_path is not None):
                     print("save:", save_path + 'image_' + str(id_) + '_' + str(i) + '_.pt')
