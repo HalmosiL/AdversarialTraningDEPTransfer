@@ -52,7 +52,7 @@ class DatasetAdversarial:
                     return [[image_normal_path, label_normal_path, image_adversarial_path, label_adversarial_path]]
 
             return []
-        elif(self.mode_ == "val" or self.mode_ == "off" or self.epoch>0):
+        elif(self.mode_ == "val" or self.epoch > 0):
             if(idx == 0):
                 if(self.epoch % 2 == 0):
                     self.bact_T_Queue = glob.glob("../backupQueue2/image_*.pt")
@@ -70,10 +70,10 @@ class DatasetAdversarial:
                     image_ = torch.load(image_path).clone()
                     label_ = torch.load(label_path).clone()
                     
-                    image_path_2 = self.bact_T_Queue[0]
-                    label_path_2 = self.bact_T_Queue[0].replace("image", "label")
-                    
                     if(len(self.bact_T_Queue) != 0):
+                        image_path_2 = self.bact_T_Queue[0]
+                        label_path_2 = self.bact_T_Queue[0].replace("image", "label")
+                        
                         image_2 = torch.load(image_path_2).clone()
                         label_2 = torch.load(label_path_2).clone()
                     
