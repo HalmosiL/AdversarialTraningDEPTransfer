@@ -22,7 +22,7 @@ def getDatasetLoader(CONFIG_PATH, type_="train", num_workers=0, pin_memory=False
             con_conf_path="../configs/config_com.json",
             data_queue_path=CONFIG['DATA_QUEUE'],
             slice_=slice_,
-            mode_="off"
+            mode_="train"
         )
     else:
         dataset = DatasetAdversarial(
