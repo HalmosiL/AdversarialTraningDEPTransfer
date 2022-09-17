@@ -23,7 +23,7 @@ class DatasetAdversarial:
         path_a = int(idx / self.slice_)
         path_b = idx % self.slice_
 
-        if(self.mode_ == "train"):
+        if(self.mode_ == "train" and self.epoch == 0):
             image_normal_path = self.data_queue_path + "image_normal" + str(path_a) + "_" + str(path_b) + "_.pt"
             label_normal_path = self.data_queue_path + "label_normal" + str(path_a) + "_" + str(path_b) + "_.pt"
             image_adversarial_path = self.data_queue_path + "image_adversarial" + str(path_a) + "_" + str(path_b) + "_.pt"
