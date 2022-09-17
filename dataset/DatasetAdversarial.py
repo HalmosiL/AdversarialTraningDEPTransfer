@@ -76,6 +76,9 @@ class DatasetAdversarial:
                         image_path_2 = self.bact_T_Queue[0]
                         label_path_2 = self.bact_T_Queue[0].replace("image", "label")
                         
+                        print(image_path_2)
+                        print(label_path_2)
+                        
                         image_2 = torch.load(image_path_2).clone()
                         label_2 = torch.load(label_path_2).clone()
                     
