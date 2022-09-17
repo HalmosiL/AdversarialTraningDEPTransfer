@@ -21,6 +21,11 @@ def sort_(key):
     
     return int(key)
 
+def clearDataCache(path):
+        models_in_cache = glob.glob(path + "*.pt")
+        for m in models_in_cache:
+            os.remove(m)
+
 def clearDataQueue(CONFIG, mode):
     if(mode == "train"):
         if(os.path.exists(CONFIG['DATA_QUEUE'])):
@@ -119,6 +124,11 @@ def train(CONFIG_PATH, CONFIG, train_loader_adversarial_, val_loader_adversarial
     for e in range(CONFIG["EPOCHS"]):
         model = model.train()
 
+        if(e % 2 == 0):
+            clearDataCache("../backupQueue2/")
+        else:
+            clearDataCache("../backupQueue1/")
+        
         loss_train_epoch = 0
         iou_train_epoch = 0
         acc_train_epoch = 0
