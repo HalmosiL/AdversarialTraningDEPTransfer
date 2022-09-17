@@ -45,8 +45,8 @@ class DatasetAdversarial:
                     label = torch.cat((label_normal, label_adversarial), dim=0)
                     
                     return [
-                        image..reshape(1, *image.shape),
-                        label..reshape(1, *label.shape),
+                        image.reshape(1, *image.shape),
+                        label.reshape(1, *label.shape),
                         [image_normal_path, label_normal_path, image_adversarial_path, label_adversarial_path]
                     ]
                 except Exception as e:
