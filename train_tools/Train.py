@@ -96,9 +96,9 @@ def train(CONFIG_PATH, CONFIG, train_loader_adversarial_, val_loader_adversarial
         model = model.train()
 
         if(e % 2 == 0):
-            clearDataCache("../backupQueue2/")
-        else:
             clearDataCache("../backupQueue1/")
+        else:
+            clearDataCache("../backupQueue2/")
         
         loss_train_epoch = 0
         iou_train_epoch = 0
