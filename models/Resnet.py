@@ -203,7 +203,7 @@ def resnet50(pretrained=False, **kwargs):
     if pretrained:
         #model.load_state_dict(model_zoo.load_url(model_urls['resnet50']))
         model.load_state_dict(torch.load(model_paths["resnet50"]), strict=False)
-    return model
+    return model.to("cpu")
 
 
 def resnet101(pretrained=False, **kwargs):
