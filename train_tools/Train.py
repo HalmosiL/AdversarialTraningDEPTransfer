@@ -22,7 +22,7 @@ def sort_(key):
     return int(key)
 
 def clearDataCache(path):
-        models_in_cache = glob.glob(path + "*.pt")
+        models_in_cache = glob.glob(path + "*")
         for m in models_in_cache:
             os.remove(m)
 
@@ -260,7 +260,7 @@ def train(CONFIG_PATH, CONFIG, train_loader_adversarial_, val_loader_adversarial
                     batch_id += 1
                     check_ = 0
                 else:
-                    print("Wait...", end='\r')
+                    print("Wait...")
                     check_ += 1
                     time.sleep(0.5)
 
