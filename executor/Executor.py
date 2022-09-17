@@ -241,7 +241,7 @@ class Executor:
                     self.generateTrainData(
                         mode="train",
                         dataloader=self.train_data_set_loader_start if epoch == 0 else self.train_data_set_loader,
-                        save_path="../backupQueue1" if epoch % 2 == 0 else "../backupQueue2",
+                        save_path="../backupQueue1/" if epoch % 2 == 0 else "../backupQueue2/",
                         number_of_steps=self.number_of_steps,
                         gen=(epoch==0)
                     )
