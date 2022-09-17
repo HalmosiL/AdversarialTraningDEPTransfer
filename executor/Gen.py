@@ -45,6 +45,8 @@ def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, s
                 print("ok")
                 
                 if(save_path is not None):
+                    print("save:", save_path + 'image_' + str(id_) + '_' + str(i) + '_.pt')
+                    print("save:", save_path + 'label_' + str(id_) + '_' + str(i) + '_.pt')
                     torch.save(image_adversarial[i].cpu().detach().clone(), save_path + 'image_' + str(id_) + '_' + str(i) + '_.pt')
                     torch.save(label_adversarial[i].cpu().detach().clone(), save_path + 'label_' + str(id_) + '_' + str(i) + '_.pt')
     else:
