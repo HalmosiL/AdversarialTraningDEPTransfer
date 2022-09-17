@@ -50,9 +50,6 @@ if __name__ == '__main__':
     for m in models_in_cache:
         os.remove(m)
 
-    if(CONFIG["START_EXECUTOR"]):
-        start(CONFIG_PATH, "./start_executor.sh")
-
     train_loader_adversarial = getDatasetLoader(
         CONFIG_PATH,
         type_="train",
