@@ -3,7 +3,7 @@ from torchvision import transforms
 import torch
 import random
 
-def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, split_size, save_path, gen=True):
+def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, split_size, save_path, epoch, gen=True):
     print("Gen_", id_, " started..")
     if(gen):
         image = batch[0].to(device)
@@ -11,21 +11,22 @@ def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, s
         image_normal = image[0]
         image_adversarial = image[1]
         
-        image_adversarial = model_immer_attack_auto_loss(
-            image=image_adversarial,
-            model=model,
-            attack=attack,
-            number_of_steps=random.randint(0, 6),
-            device=device
-        )
-        
-        image_normal = model_immer_attack_auto_loss(
-            image=image_normal,
-            model=model,
-            attack=attack,
-            number_of_steps=random.randint(0, 6),
-            device=device
-        )
+        if(5 < epoch):
+            image_adversarial = model_immer_attack_auto_loss(
+                image=image_adversarial,
+                model=model,
+                attack=attack,
+                number_of_steps=random.randint(0, 6),
+                device=device
+            )
+
+            image_normal = model_immer_attack_auto_loss(
+                image=image_normal,
+                model=model,
+                attack=attack,
+                number_of_steps=random.randint(0, 6),
+                device=device
+            )
         
         label = batch[1]
         label = torch.split(label, int(len(label)/2))
