@@ -1,6 +1,7 @@
 from executor.Adversarial import model_immer_attack_auto_loss
 from torchvision import transforms
 import torch
+import random
 
 def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, split_size, save_path, gen=True):
     print("Gen_", id_, " started..")
@@ -14,7 +15,7 @@ def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, s
             image=image_adversarial,
             model=model,
             attack=attack,
-            number_of_steps=number_of_steps,
+            number_of_steps=random.randint(0, 6),
             device=device
         )
         
@@ -22,7 +23,7 @@ def run(id_, batch, device, model, attack, number_of_steps, data_queue, split, s
             image=image_normal,
             model=model,
             attack=attack,
-            number_of_steps=1,
+            number_of_steps=random.randint(0, 6),
             device=device
         )
         
